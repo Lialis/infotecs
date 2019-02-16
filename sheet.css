@@ -28,7 +28,6 @@ body {
 
 #pages{
     color: inherit;
-    /*font-weight: bold;*/
     border: 1px solid black;
     margin: 4px;
 }
@@ -56,60 +55,22 @@ body {
   background: #FAEBD7;
 }
 
-.row:hover{ /* выделение выбранной строки зеленым цветом */
+.row:hover{ /
   background: #66CDAA;
   cursor: pointer;
 }
 
-
-
-
-
-
-
-
-
-
-.about {
-  overflow: hidden; /* прячет текст */
+.about {/*вывод двух строк, обрезаемых троеточием,  не получилось реализовать*/
+  overflow: hidden; 
   text-overflow: ellipsis;
   word-wrap: break-word;
-  /*line-height: 180%;*/
-
   white-space: nowrap;
-  max-width: 200px;
-  /*max-height: 25px;*/
-  
-  /*background-color:#fff5ee;  */
+  max-width: 200px;  
 }
-
-
 
 .net{
   border: 1px solid black;
 }
 
-
-
-/*i:after{
-  content: '\2191';
-}
-
-a {
-  cursor: pointer;
-  padding: 0px 5px;
-}
-
-a:hover {
-  background: #66CDAA;
-}
-*/
-.button {
-    display: none;
-}
-
-.heading:hover + .button, .button:hover {
-    display: inline-block;
-}
 
 

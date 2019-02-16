@@ -1,5 +1,4 @@
-info = [// JSON у меня не получилось вынести в отдельный файл, именно поэтому задание на 4 дня позже сдаю
-
+info = [
   {
     "id": "5c2286fb23e87be312d55d9a",
     "name": {
@@ -501,232 +500,202 @@ info = [// JSON у меня не получилось вынести в отде
     "eyeColor": "brown"
   }
 ]
-   
+
 document.addEventListener('DOMContentLoaded', () => {
-    const data = document.getElementById('data');
-    const changeValue = document.getElementById('changeValue');
-    const pages = document.getElementById('pages');
-    const heading = ["Имя", "Фамилия", "Номер телефона", "Описание", "Цвет глаз"];
-    const statecolumn = [false, false,false,false,false];
-    const headingCode = ["firstName", "lastName", "phone", "about", "eyeColor"];
+  const data = document.getElementById('data');
+  const changeValue = document.getElementById('changeValue');
+  const pages = document.getElementById('pages');
+  const heading = ['Имя', 'Фамилия', 'Номер телефона', 'Описание', 'Цвет глаз'];
+  const statecolumn = [false, false, false, false, false];// Необходим для отрисовки колонок, true - колонка скрыта
+  const headingCode = ['firstName', 'lastName', 'phone', 'about', 'eyeColor'];
 
-    let currentPage;
+  let currentPage; // текущая страница
 
-    const view = function(n){
-      const tbody = data.getElementsByTagName('tbody')[0];
-      data.removeChild(tbody);
-      const thead = data.getElementsByTagName('thead')[0];
-      data.removeChild(thead);
+  const view = function (n) { // постраничный вывод данных;
+    const tbody = data.getElementsByTagName('tbody')[0];
+    data.removeChild(tbody);
+    const thead = data.getElementsByTagName('thead')[0];
+    data.removeChild(thead);
 
-      var t = "";  
-       t+="<thead><tr>";
-      for(let i = 0; i<5; i++){    
-      if(statecolumn[i]){  	
-	    	
-	    }else{
-	    	t+="<th class = 'heading' >"+heading[i]+"</th>";
-	    }
-	    } 
-	    t+="</tr></thead>";   
-      t+="<tbody>";
+    let t = '';
+    t += '<thead><tr>'; // отрисовка заголовков колонок
+    for (let i = 0; i < 5; i++) {
+      if (statecolumn[i]) {
 
-      for (var i = n*10; i <= (n+1)*10-1; i++){      	
-      	var tr = "<tr class = 'row'>";
-      	const currentRow = columns(i);
-      	for(let j=0; j<5;j++){
-      		if(statecolumn[j]){      			
-      		}else{
-		      		if(j==3){
-		      			tr += "<td class = 'about' >"+currentRow[j]+"</td>";   
-		      		}else if(j==4){
-		      			tr += "<td  style = 'background-color:"+currentRow[j]+"'>"+"</td>";
-		      		}else {
-		      		tr += "<td >"+currentRow[j]+"</td>";
-			      	}
-		      }
-      	}      	
-        t += tr;
+      } else {
+        t += `<th class = 'heading' >${heading[i]}</th>`;
       }
-      t+="</tbody>";
-      data.innerHTML += t;
+    }
+    t += '</tr></thead>';
+    t += '<tbody>';
 
-
-      const tbody2 = pages.getElementsByTagName('tbody')[0]
-      pages.removeChild(tbody2);
-      var t1 = "";  
-      t1+= "<tbody>";
-      for(let i=0;i<5; i++){
-      	const indexx = i+1;
-      	if(i==n){
-      		t1+="<th class='page net'>"+indexx+"</th>";
-      	}else{
-      		t1+="<th class='page'>"+indexx+"</th>";
-      	}
+    for (let i = n * 10; i <= (n + 1) * 10 - 1; i++) {//постраничный вывод данных
+      let tr = "<tr class = 'row'>";
+      const currentRow = columns(i); //элемент JSON для заданной позиции
+      for (let j = 0; j < 5; j++) {//
+        if (statecolumn[j]) {
+        } else if (j === 3) {
+          tr += `<td class = 'about' >${currentRow[j]}</td>`;
+        } else if (j === 4) {
+          tr += `<td  style = 'background-color:${currentRow[j]}'>` + '</td>';
+        } else {
+          tr += `<td >${currentRow[j]}</td>`;
+        }
       }
-      t1+= "</tbody>";
-      pages.innerHTML += t1;
-
-
+      t += tr;
     }
+    t += '</tbody>';
+    data.innerHTML += t;
 
 
-    const columns =function(row){
-    	const column = [info[row]["name"]["firstName"], info[row]["name"]["lastName"], info[row]["phone"], info[row]["about"], info[row]["eyeColor"]];
-    	return column;
+    const tbody2 = pages.getElementsByTagName('tbody')[0];
+    pages.removeChild(tbody2);
+    let t1 = '';
+    t1 += '<tbody>';
+    for (let i = 0; i < 5; i++) {//отрисовка номеров страниц и выделение текущей страницы
+      const indexx = i + 1;
+      if (i === n) {
+        t1 += `<th class='page net'>${indexx}</th>`;
+      } else {
+        t1 += `<th class='page'>${indexx}</th>`;
+      }
     }
+    t1 += '</tbody>';
+    pages.innerHTML += t1;
+  };
 
 
-    const changeRow = function(row){
-	    t="";
-	    const currentRow = columns(row);
-	    for(let i = 0; i<5; i++){
-	    	t+="<p>"+heading[i]+"<Br>";
-	    	t+= "<textarea name='comment' cols='40' rows='1'>"+currentRow[i]+"</textarea></p>";
-	    }	    
-		  changeValue.innerHTML += t;
-	  }
+  const columns = function (row) {// необходима для вывода данных через цикл
+    const column = [info[row].name.firstName, info[row].name.lastName, info[row].phone, info[row].about, info[row].eyeColor];
+    return column;
+  };
 
 
-
-
-
-
-
-
-    view(0);
-    currentPage = 0;
-
-    const sorter2 = function(column, ret1, ret2){
-      info.sort(function(a, b) {
-        if (a[column]< b[column]) return ret1;
-        if (a[column] > b[column]) return ret2;
-        return 0;
-      });
+  const changeRow = function (row) {//поля редактрования строки
+    let t = '';
+    const currentRow = columns(row);
+    for (let i = 0; i < 5; i++) {
+      t += `<p>${heading[i]}<Br>`;//название колонки
+      t += `<textarea name='comment' cols='40' rows='1'>${currentRow[i]}</textarea></p>`;//Значание, которое можно редактировать
     }
-    const sorter1 = function(column, ret1, ret2){
-      info.sort(function(a, b) {
-        if (a["name"][column]< b["name"][column]) return ret1;
-        if (a["name"][column] > b["name"][column]) return ret2;
-        return 0;
-      });
-	  }
+    changeValue.innerHTML += t;
+  };
 
-    let state = true;
-    const sorter = function(index){
-      console.log(index);
-      const pol = document.getElementById('changeValue');
-		    while(pol.firstChild){
-	        pol.removeChild(pol.firstChild);
-		    }
-      switch (index) {
-        case 0:
-	        if(state){
-	          sorter1("firstName", -1, 1);
-	          state = false;    
-	        }else{
-	        	sorter1("firstName", 1, -1);
-	        	state = true;
-	        }
-	        break;
-        case 1:
-          if(state){
-	          sorter1("lastName", -1, 1);
-	          state = false;    
-	        }else{
-	        	sorter1("lastName", 1, -1);
-	        	state = true;
-	        }
-	        break;
-        case 2:
-	        if(state){
-	          sorter2("phone", -1, 1);
-	          state = false;    
-	        }else{
-	        	sorter2("phone", 1, -1);
-	        	state = true;
-	        }
+  
+
+  const sorter2 = function (column, ret1, ret2) { // cортирка для имени и фамилии
+    info.sort((a, b) => {
+      if (a[column] < b[column]) return ret1;
+      if (a[column] > b[column]) return ret2;
+      return 0;
+    });
+  };
+  const sorter1 = function (column, ret1, ret2) {//сортировка для номера телефона, описания и цвета глаз
+    info.sort((a, b) => {
+      if (a.name[column] < b.name[column]) return ret1;
+      if (a.name[column] > b.name[column]) return ret2;
+      return 0;
+    });
+  };
+
+  const remove = function(){// удаление ранее отрисованных элементов окна редавтирования,  необходимо при переходе со странице на страницу или сортировке, так как изменяемая строка уже не актуальна
+    while (changeValue.firstChild) {
+      changeValue.removeChild(changeValue.firstChild);
+    }
+  }
+
+  let state = true; //  true сортировка по возрастанию, false - по убыванию
+  const sorter = function (index) { // функция сортировки JSON
+    remove(); 
+    switch (index) {//index номер  колонки, относительно которой необходимо прозвести сортировку
+      case 0:
+        if (state) {
+          sorter1('firstName', -1, 1);
+          state = false;
+        } else {
+          sorter1('firstName', 1, -1);
+          state = true;
+        }
         break;
-        case 3:
-          if(state){
-	          sorter2("about", -1, 1);
-	          state = false;    
-	        }else{
-	        	sorter2("about", 1, -1);
-	        	state = true;
-	        }
-	        break;
-        case 4:
-          if(state){
-	          sorter2("eyeColor", -1, 1);
-	          state = false;    
-	        }else{
-	        	sorter2("eyeColor", 1, -1);
-	        	state = true;
-	        }
-	        break;
-        default:
-          return;
-	        break;      
+      case 1:
+        if (state) {
+          sorter1('lastName', -1, 1);
+          state = false;
+        } else {
+          sorter1('lastName', 1, -1);
+          state = true;
+        }
+        break;
+      case 2:
+        if (state) {
+          sorter2('phone', -1, 1);
+          state = false;
+        } else {
+          sorter2('phone', 1, -1);
+          state = true;
+        }
+        break;
+      case 3:
+        if (state) {
+          sorter2('about', -1, 1);
+          state = false;
+        } else {
+          sorter2('about', 1, -1);
+          state = true;
+        }
+        break;
+      case 4:
+        if (state) {
+          sorter2('eyeColor', -1, 1);
+          state = false;
+        } else {
+          sorter2('eyeColor', 1, -1);
+          state = true;
+        }
+        break;
+      default:
+
+        break;
+    }
+  };
+
+
+  data.onclick = function (e) {
+    if (e.target.tagName === 'TH') { // при нажатии на заголовок таблицы
+      const cellIndex = event.target.cellIndex; // определяется какую именно колонку необходимо сотрировать
+      sorter(cellIndex); 
+      view(0); 
+    } else if (e.target.tagName === 'TD') {// определение строки которую необходимо редавктировать
+      const cellIndex2 = event.target.parentNode.rowIndex; // номер строки
+      const choisenrow = currentPage * 10 + cellIndex2;// определение позиции нужного элемента в JSON
+      remove();
+      changeRow(choisenrow - 1); //создание нового
+    } 
+  };
+
+  //постраничный вывод данных 
+  pages.onclick = function (e) {
+    if (e.target.tagName != 'TH') {
+      return;
+    }
+    currentPage = event.target.cellIndex; //определение текущей страницы, переменная currentPage определена глобально, чтобы при сортировке колонки или скрытия или показа, остаться на текущей странице
+    view(currentPage); 
+    remove();
+  };
+
+//проверка состояний chexbox для скрытия или показа колонок таблицы
+  document.addEventListener('change', () => {
+    const chk = event.target;
+    if (chk.tagName === 'INPUT' && chk.type === 'checkbox') {
+      for (let i = 0; i < 5; i++) {
+        if (chk.name === headingCode[i]) {
+          statecolumn[i] = chk.checked;
+        }
       }
+      view(currentPage);
     }
-
-    
-    data.onclick = function(e) {
-	    if (e.target.tagName == 'TH'){
-	    	const cellIndex = event.target.cellIndex;
-	    	sorter(cellIndex);
-	    	view(0);
-	    }else if (e.target.tagName == 'TD') {
-	    	const cellIndex2 = event.target.parentNode.rowIndex;
-    		const choisenrow = currentPage*10+cellIndex2;
-    		const pol = document.getElementById('changeValue');
-		    while(pol.firstChild){
-	        pol.removeChild(pol.firstChild);
-		    }
-      	changeRow(choisenrow-1);
-	    }else{
-	    	return;
-	    } 
-    };
-
-    pages.onclick = function(e) {
-    	if (e.target.tagName != 'TH'){
-    		return;
-    	}else{    		
-    		const cellIndex2 = event.target.cellIndex;
-      	currentPage = cellIndex2;
-      	console.log(currentPage);
-	    	view(cellIndex2);
-	    	const pol = document.getElementById('changeValue');
-		    while(pol.firstChild){
-	        pol.removeChild(pol.firstChild);
-		    }
-    	}    
-    }
-
-
-
-    document.addEventListener('change', function () {
-		  var chk = event.target
-		  
-		  if (chk.tagName === 'INPUT' && chk.type === 'checkbox') {
-		  	for(let i=0; i<5;i++){
-		  	if (chk.name==headingCode[i]){
-		  		statecolumn[i]=chk.checked;
-
-
-		  		
-		  	}
-		    console.log("%s %s %s", chk.name, chk.value, chk.checked)
-		  	}
-		  	console.log(statecolumn);
-		  	view(currentPage);
-		  }
-		})
-    
-
-
-
-
   });
- 
+
+  view(0);//превая страница 
+  currentPage = 0;
+});
