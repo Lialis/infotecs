@@ -501,35 +501,6 @@ info = [
   }
 ]
 
-// export { info };
-
-// module.exports.info = info;
-
-console.log(info[5]["name"]["firstName"]);
-// console.log(info[5]["phone"]);
-
-// // info.sort(function(a, b) {
-// //     return a.eyeColor - b.eyeColor;
-// // });
-
-// info.sort(function(a, b) {
-// 	if (a.eyeColor < b.eyeColor) return 1;
-//   if (a.eyeColor > b.eyeColor) return -1;
-//   return 0;});
-
-// // info.sort(function(a, b) {
-// // 	if (a.phone < b.phone) return 1;
-// //   if (a.phone > b.phone) return -1;
-// //   return 0;});
-info.sort(function(a, b) {
- const column = "eyeColor";
-	if (a[column]< b[column]) return 1;
-	if (a[column] > b[column]) return -1;
-	return 0;
-});
-
-
-// console.log(info);
 
 
 
