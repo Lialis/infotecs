@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (j === 3) {
           tr += `<td class = 'about' >${currentRow[j]}</td>`;
         } else if (j === 4) {
-          tr += `<td  style = 'background-color:${currentRow[j]}'>` + '</td>';
+          tr += `<td  style = 'background-color:${currentRow[j]};  color:${currentRow[j]}'>${currentRow[j]}</td>` ;
         } else {
           tr += `<td >${currentRow[j]}</td>`;
         }
