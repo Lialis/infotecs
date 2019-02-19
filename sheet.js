@@ -10,53 +10,65 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentPage; // текущая страница
 
   const view = function (n) { // постраничный вывод данных;
-    const tbody = data.getElementsByTagName('tbody')[0];
-    data.removeChild(tbody);
     const thead = data.getElementsByTagName('thead')[0];
     data.removeChild(thead);
+    const tbody = data.getElementsByTagName('tbody')[0];
+    data.removeChild(tbody); //удаление предыдущей таблицы для добавления новой
 
-    let t = '';
-    t += '<thead><tr>'; // отрисовка заголовков колонок
+    const theadOfData = document.createElement('thead');
+    const trOfData = document.createElement('tr');
     for (let i = 0; i < amountOfColumns; i++) {
       if (!statecolumn[i]) {// проверка на необходимость отображения данного столбец
-        t += `<th class = 'heading' >${heading[i]}</th>`;
-      } 
+        const thOfData = document.createElement('th');
+        thOfData.className = 'heading';
+        thOfData.innerHTML= heading[i]; 
+        trOfData.appendChild(thOfData); 
+      }
     }
-    t += '</tr></thead>';
-    t += '<tbody>';
+    theadOfData.appendChild(trOfData);
+    data.appendChild(theadOfData);
+
+
+    const tbodyOfData = document.createElement('tbody');
 
     for (let i = n * amountOfRows; i <= (n + 1) * amountOfRows - 1; i++) {//постраничный вывод данных
-      let tr = "<tr class = 'row'>";
+      const trOfTbody  = document.createElement('tr');
+      trOfTbody.className = 'row';
       const currentRow = columns(i); //элемент JSON для заданной позиции
       for (let j = 0; j < amountOfColumns; j++) {//
-        if (statecolumn[j]) {
-        } else if (j === 3) {
-          tr += `<td class = 'about' >${currentRow[j]}</td>`;
-        } else if (j === 4) {
-          tr += `<td  style = 'background-color:${currentRow[j]};  color:${currentRow[j]}'>${currentRow[j]}</td>` ;
-        } else {
-          tr += `<td >${currentRow[j]}</td>`;
+        const tdOfData = document.createElement('td');
+        if (!statecolumn[j]) {
+          if (j === 3) {
+            tdOfData.className = 'about';
+          } else if (j === 4) {
+            tdOfData.className = currentRow[j];
+          } 
+          tdOfData.innerHTML = currentRow[j];
+          trOfTbody.appendChild(tdOfData);
         }
       }
-      t += tr;
+      tbodyOfData.appendChild(trOfTbody);
     }
-    t += '</tbody>';
-    data.innerHTML += t;
+    data.appendChild(tbodyOfData);
+
 
     const tbody2 = pages.getElementsByTagName('tbody')[0];
     pages.removeChild(tbody2);
-    let t1 = '';
-    t1 += '<tbody>';
+    const tbodyOfPage = document.createElement('tbody');
+    const trOfPage = document.createElement('tr');
     for (let i = 0; i < amountOfColumns; i++) {//отрисовка номеров страниц и выделение текущей страницы
       const indexx = i + 1;
+      thOfPage = document.createElement('th');
       if (i === n) {
-        t1 += `<th class='page net'>${indexx}</th>`;
+        thOfPage.className = 'page currentPage';
       } else {
-        t1 += `<th class='page'>${indexx}</th>`;
+        thOfPage.className = 'page';
       }
+      thOfPage.innerHTML = i+1;
+      trOfPage.appendChild(thOfPage);
     }
-    t1 += '</tbody>';
-    pages.innerHTML += t1;
+    tbodyOfPage.appendChild(trOfPage);
+    pages.appendChild(tbodyOfPage);
   };
 
   const columns = function (row) {// необходима для вывода данных через цикл
@@ -74,17 +86,18 @@ document.addEventListener('DOMContentLoaded', () => {
     changeValue.innerHTML += t;
   };
 
-  const sorter2 = function (column, ret1, ret2) { // cортирка для имени и фамилии
-    info.sort((a, b) => {
-      if (a[column] < b[column]) return ret1;
-      if (a[column] > b[column]) return ret2;
-      return 0;
-    });
-  };
   const sorter1 = function (column, ret1, ret2) {//сортировка для номера телефона, описания и цвета глаз
     info.sort((a, b) => {
       if (a.name[column] < b.name[column]) return ret1;
       if (a.name[column] > b.name[column]) return ret2;
+      return 0;
+    });
+  };
+
+  const sorter2 = function (column, ret1, ret2) { // cортирка для имени и фамилии
+    info.sort((a, b) => {
+      if (a[column] < b[column]) return ret1;
+      if (a[column] > b[column]) return ret2;
       return 0;
     });
   };
@@ -184,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
       view(currentPage);
     }
   });
-
   view(0);//превая страница 
   currentPage = 0;
 });
